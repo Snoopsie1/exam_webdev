@@ -209,19 +209,3 @@ def send_mail(to_email, from_email, email_subject, email_body):
     except Exception as ex:
         print(ex)
         return "error"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
