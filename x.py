@@ -1,5 +1,7 @@
 from bottle import request, response
 from icecream import ic
+import psycopg2
+from psycopg2.extras import RealDictCursor
 import bcrypt
 import os
 import re
@@ -11,6 +13,7 @@ import random
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import glob
+from datetime import datetime
 
 ##############################
 def dict_factory(cursor, row):
@@ -18,14 +21,24 @@ def dict_factory(cursor, row):
     return {key: value for key, value in zip(col_names, row)}
 
 ##############################
-
+def datetime_converter(o):
+    if isinstance(o, datetime):
+        return o.isoformat()
+    return o
+##############################
 def db():
     try:
-        db = sqlite3.connect(str(pathlib.Path(__file__).parent.resolve())+"/database/company.db")  
-        db.row_factory = dict_factory
-        return db
+        connection = psycopg2.connect(
+            dbname="company_postgres",
+            user="user",
+            password="password",
+            host="postgres",
+            port="5432",
+            cursor_factory=RealDictCursor
+        )
+        return connection
     except Exception as ex:
-        return 'server under maintenance'
+        ic(f"db error occurred: {ex}")
 
 ##############################
 
