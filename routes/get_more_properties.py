@@ -26,7 +26,7 @@ def _(page_number):
         else: 
             query = f"SELECT * FROM properties WHERE property_is_blocked != '1' AND property_deleted_at == '0' ORDER BY property_created_at LIMIT {limit} OFFSET {offset}"
         
-        q = db.execute(query)
+        q = db.cursor().execute(query)
         properties = q.fetchall()
         
         

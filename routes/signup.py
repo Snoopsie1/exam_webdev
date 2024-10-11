@@ -18,7 +18,7 @@ def _():
         salt = bcrypt.gensalt()
         user_password_hashed = bcrypt.hashpw(user_password, salt)
         db = x.db()
-        q = db.execute("INSERT INTO users(user_pk, user_email, user_username, user_name, user_last_name, user_password, user_role_fk) VALUES(?,?,?,?,?,?,?)", (user_pk, user_email, user_username, user_name, user_last_name, user_password_hashed, user_role_fk))
+        q = db.cursor().execute("INSERT INTO users(user_pk, user_email, user_username, user_name, user_last_name, user_password, user_role_fk) VALUES(%s,%s,%s,%s,%s,%s,%s)", (user_pk, user_email, user_username, user_name, user_last_name, user_password_hashed, user_role_fk))
         db.commit()
         x.send_mail(user_email, user_email, "Verify your account", template("email_verification", key=user_pk))
 

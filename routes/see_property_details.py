@@ -6,7 +6,7 @@ import x
 def _(property_pk):
     try:
         db = x.db()
-        q = db.execute("SELECT * from properties WHERE property_pk = ?", (property_pk,))
+        q = db.cursor().execute("SELECT * from properties WHERE property_pk = %s", (property_pk,))
         fetched_property = q.fetchone()
         property_images = fetched_property['property_images'].split(',')
         try:

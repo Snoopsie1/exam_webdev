@@ -29,9 +29,9 @@ CREATE TABLE users (
 
 -- Insert values into users table
 INSERT INTO users (user_pk, user_role_fk, user_username, user_name, user_last_name, user_email, user_password, user_is_blocked, user_is_verified, user_created_at, user_updated_at, user_deleted_at) VALUES
-('1', '1', 'dirty_ranch', 'ole', 'olesen', 'ole@partner.dk', '\x24326224313224424a356664732f326f344649774c685a32695362612e474b43594b572f6578764b6e6e6e70494b76784b334f41534155636a68566d', '0', '1', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0'),
-('2', '0', 'cowboy', 'anders', 'andersen', 'anders@customer.dk', '\x24326224313224424a356664732f326f344649774c685a32695362612e474b43594b572f6578764b6e6e6e70494b76784b334f41534155636a68566d', '0', '0', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0'),
-('3', '2', 'admin', 'admin', 'adminson', 'admin@company.dk', '\x24326224313224424a356664732f326f344649774c685a32695362612e474b43594b572f6578764b6e6e6e70494b76784b334f41534155636a68566d', '0', '1', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0');
+('1', '1', 'dirty_ranch', 'ole', 'olesen', 'ole@partner.dk', '12345678', '0', '1', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0'),
+('2', '0', 'cowboy', 'anders', 'andersen', 'anders@customer.dk', '12345678', '0', '0', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0'),
+('3', '2', 'admin', 'admin', 'adminson', 'admin@company.dk', '12345678', '0', '1', '2024-06-03 09:03:13', '2024-06-03 09:03:13', '0');
 
 -- Create properties table
 CREATE TABLE properties (

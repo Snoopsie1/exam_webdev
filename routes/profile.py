@@ -12,22 +12,23 @@ def _():
             redirect('/login')
 
         db = x.db()
+        cursor = db.cursor()
 
-        user_q = db.execute('SELECT * FROM users WHERE user_pk = ? AND user_role_fk = ?', (user_data['user_pk'],user_data['user_role_fk']))
-        user = user_q.fetchone()
+        cursor.execute('SELECT * FROM users WHERE user_pk = %s AND user_role_fk = %s', (user_data['user_pk'],user_data['user_role_fk']))
+        user = cursor.fetchone()
 
         if user['user_role_fk'] == '2':
-            user_list_q = db.execute('SELECT * FROM users WHERE user_role_fk != 2')
-            user_list = user_list_q.fetchall()
-            properties_q = db.execute("SELECT * FROM properties ORDER BY property_created_at")
-            properties = properties_q.fetchall()
+            cursor.execute('SELECT * FROM users WHERE user_role_fk != 2')
+            user_list = cursor.fetchall()
+            cursor.execute("SELECT * FROM properties ORDER BY property_created_at")
+            properties = cursor.fetchall()
             db.commit()
 
             return template('profile_admin.html', user_list=user_list, is_logged=True, is_admin=True, properties=properties)
             
     
-        property_q = db.execute('SELECT * FROM properties WHERE property_user_fk = ?', (user_data['user_pk'],))
-        users_properties = property_q.fetchall()
+        cursor.execute('SELECT * FROM properties WHERE property_user_fk = %s', (user_data['user_pk'],))
+        users_properties = cursor.fetchall()
 
         return template('profile.html', user=user, users_properties=users_properties, is_logged=True, is_admin=False, in_profile=True)
     except HTTPResponse:
@@ -44,7 +45,7 @@ def _():
         <template mix-target='#modal_content' mix-replace>
             <div id="modal_content" class="flex flex-col gap-4">
                 <div>
-                    <h2>Are you sure you want to delete your profile?</h2>
+                    <h2>Are you sure you want to delete your profile%s</h2>
                     <p>Write your email and press 'confirm' to delete your profile.</p>
                 </div>
                 <form
@@ -86,7 +87,7 @@ def _():
 
         if user_data['user_email'] == x.validate_user_email():
             db = x.db()
-            q = db.execute('UPDATE users SET user_deleted_at = CURRENT_TIMESTAMP WHERE user_pk = ?', (user_data['user_pk'],))
+            q = db.cursor().execute('UPDATE users SET user_deleted_at = CURRENT_TIMESTAMP WHERE user_pk = %s', (user_data['user_pk'],))
             x.delete_cookie('user')
             x.send_mail(user_data['user_email'], 'admin@bottleBnB.com', "Profile has been deleted", template('email_profile_restore', user_pk=user_data['user_pk']))
             db.commit()

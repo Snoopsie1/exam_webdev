@@ -8,12 +8,12 @@ import x
 def _(deleted_image, property_pk):
     try:
         db = x.db()
-        property_query = db.execute('SELECT * FROM properties WHERE property_pk = ?', (property_pk,))
+        property_query = db.cursor().execute('SELECT * FROM properties WHERE property_pk = %s', (property_pk,))
         property_to_edit = property_query.fetchone()
 
         new_property_images = x.remove_image_from_property(property_to_edit['property_images'], deleted_image)
         
-        db.execute("UPDATE properties SET property_images = ? WHERE property_pk = ?", (new_property_images, property_pk))
+        db.cursor().execute("UPDATE properties SET property_images = %s WHERE property_pk = %s", (new_property_images, property_pk))
         db.commit()
 
         return f"""
@@ -41,7 +41,7 @@ def _(property_pk):
         property_images = x.validate_edited_property_images()
 
         db = x.db()
-        images_q = db.execute('SELECT property_images FROM properties WHERE property_pk = ?', (property_pk,))
+        images_q = db.cursor().execute('SELECT property_images FROM properties WHERE property_pk = %s', (property_pk,))
         old_property_images = images_q.fetchone()
 
         filenames = []
@@ -87,12 +87,12 @@ def _(property_pk):
             """
         # 4. Profit
 
-        db.execute('''UPDATE properties SET 
-            property_name = ?, property_description = ?, 
-            property_address = ?, property_country = ?, 
-            property_postal_code = ?, property_price_pr_night = ?,
-            property_images = ?, property_updated_at = CURRENT_TIMESTAMP
-            WHERE property_pk = ?''', 
+        db.cursor().execute('''UPDATE properties SET 
+            property_name = %s, property_description = %s, 
+            property_address = %s, property_country = %s, 
+            property_postal_code = %s, property_price_pr_night = %s,
+            property_images = %s, property_updated_at = CURRENT_TIMESTAMP
+            WHERE property_pk = %s''', 
             (property_name, property_description, 
             property_address, property_country, 
             property_postal_code, property_price_pr_night, 
@@ -115,7 +115,7 @@ def _(property_pk):
 def _(property_pk):
     try:
         db = x.db()
-        q = db.execute("SELECT * FROM properties WHERE property_pk = ?", (property_pk,))
+        q = db.cursor().execute("SELECT * FROM properties WHERE property_pk = %s", (property_pk,))
         property_to_edit = q.fetchone();
         property_images = property_to_edit['property_images'].split(',')
         property_image_html = ''

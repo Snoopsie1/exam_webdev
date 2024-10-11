@@ -8,7 +8,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - bottle_arangodb_network
+      - bottle_postgres_network
 
   python:
     environment:
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./:/app
     networks:
-      - bottle_arangodb_network
+      - bottle_postgres_network
 
   postgres:
     image: postgres:latest
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./database/postgres.sql:/docker-entrypoint-initdb.d/sqlite_dump.sql
     networks:
-      - bottle_arangodb_network
+      - bottle_postgres_network
 
 networks:
-  bottle_arangodb_network:
+  bottle_postgres_network:

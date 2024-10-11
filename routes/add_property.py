@@ -171,11 +171,11 @@ def _():
         filenames_str = ",".join(filenames)
 
         db = x.db()
-        q = db.execute("""
+        q = db.cursor().execute("""
             INSERT INTO properties(property_pk, property_user_fk, property_booking_fk, property_name,
             property_description, property_price_pr_night, property_images, property_rating,
             property_address, property_country, property_postal_code, property_lat, 
-            property_lon, property_is_blocked) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (property_pk, user_data['user_pk'], '0', property_name, property_description, property_price_pr_night, filenames_str, 4.5, property_address, property_country, property_postal_code, property_lon, property_lat, "0"))
+            property_lon, property_is_blocked) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""", (property_pk, user_data['user_pk'], '0', property_name, property_description, property_price_pr_night, filenames_str, 4.5, property_address, property_country, property_postal_code, property_lon, property_lat, "0"))
         db.commit()
         
         return """

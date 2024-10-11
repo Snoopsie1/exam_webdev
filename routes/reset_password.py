@@ -15,7 +15,7 @@ def _(key):
         ic(user_password_hashed)
 
         db = x.db()
-        q = db.execute("UPDATE users SET user_password = ? WHERE user_pk = ?", (user_password_hashed, key))
+        q = db.cursor().execute("UPDATE users SET user_password = %s WHERE user_pk = %s", (user_password_hashed, key))
         db.commit()
 
     except Exception as ex:

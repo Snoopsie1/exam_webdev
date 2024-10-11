@@ -13,7 +13,7 @@ def _(user_pk):
         user_last_name = x.validate_user_last_name()
 
         db = x.db()
-        q = db.execute('UPDATE users SET user_email = ?, user_username = ?, user_name = ?, user_last_name = ?, user_updated_at = CURRENT_TIMESTAMP WHERE user_pk = ?', (user_email, user_username, user_name, user_last_name, user_pk))
+        q = db.cursor().execute('UPDATE users SET user_email = %s, user_username = %s, user_name = %s, user_last_name = %s, user_updated_at = CURRENT_TIMESTAMP WHERE user_pk = %s', (user_email, user_username, user_name, user_last_name, user_pk))
         db.commit()
         return f"""
             <template mix-target="#put_user_email" mix-replace>

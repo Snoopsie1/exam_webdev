@@ -16,7 +16,7 @@ def _():
         # Lav password og confirm password
 
         db = x.db()
-        user_pk = db.execute("SELECT user_pk FROM users WHERE user_email = ?", (user_mail,)).fetchone()["user_pk"]
+        user_pk = db.cursor().execute("SELECT user_pk FROM users WHERE user_email = %s", (user_mail,)).fetchone()["user_pk"]
         db.commit()
         ic(user_pk)
 

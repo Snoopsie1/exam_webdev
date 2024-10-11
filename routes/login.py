@@ -11,11 +11,23 @@ def _():
     user_email = x.validate_user_email()
     user_password = x.validate_user_password()
     db = x.db()
-    q = db.execute('SELECT * FROM users WHERE user_email = ?', (user_email,))
-    user = q.fetchone()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users WHERE user_email = %s', (user_email,))
+    ic("FETCHER FETCHER FETCHER")
+    user = cursor.fetchone()
+    ic('USER USER USER USER USER USER USER')
     ic(user)
+    ic('PASSWORD PASSWORD PASSWORD PASSWORD')
+    ic(user['user_password'])
     if user:
-        if not bcrypt.checkpw(user_password.encode(), user["user_password"]): raise Exception("Invalid credentials", 400)
+        # try:
+        #     # Ensure the stored password is a valid bcrypt hash
+        #     stored_password_bytes = user["user_password"].encode()
+        #     if not bcrypt.checkpw(user_password.encode(), stored_password_bytes): 
+        #         raise Exception("Invalid credentials", 400)
+        # except ValueError as e:
+        #     ic(e)
+        #     raise Exception("Invalid stored password format", 500)
         if user['user_is_blocked'] == '1':
                return """
                     <template mix-redirect="/user_blocked">
@@ -33,7 +45,7 @@ def _():
                 for key in user:
                     if isinstance(user[key], bytes):
                         user[key] = user[key].decode('utf-8')
-                user_data = json.dumps(user)
+                user_data = json.dumps(user, default=x.datetime_converter)
                 response.set_cookie("user", user_data, secret=x.COOKIE_SECRET, httponly=True, secure=x.is_cookie_https())
                 return """
                     <template mix-redirect="/" is_logged=True>

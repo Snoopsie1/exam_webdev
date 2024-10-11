@@ -7,8 +7,8 @@ from icecream import ic
 def _(key):
     try:
         db = x.db()
-        q = db.execute("UPDATE users SET user_is_verified = 1 WHERE user_pk = ?", (key,))
-        user_name = db.execute("SELECT user_name FROM users WHERE user_pk = ?", (key,)).fetchone()["user_name"]
+        q = db.cursor().execute("UPDATE users SET user_is_verified = 1 WHERE user_pk = %s", (key,))
+        user_name = db.cursor().execute("SELECT user_name FROM users WHERE user_pk = %s", (key,)).fetchone()["user_name"]
         db.commit()
         return template("login")
     except Exception as ex:

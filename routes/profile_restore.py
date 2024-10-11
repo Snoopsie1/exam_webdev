@@ -6,7 +6,7 @@ import x
 def _(user_pk):
     try:
         db = x.db()
-        q = db.execute('UPDATE users SET user_deleted_at = 0 WHERE user_pk = ?', (user_pk,))
+        q = db.cursor().execute('UPDATE users SET user_deleted_at = 0 WHERE user_pk = %s', (user_pk,))
         db.commit()
 
         return"""
@@ -32,7 +32,7 @@ def _(user_pk):
 def _(user_pk):
     try:
         db = x.db()
-        q = db.execute('UPDATE users SET user_deleted_at = 0 WHERE user_pk = ?', (user_pk,))
+        q = db.cursor().execute('UPDATE users SET user_deleted_at = 0 WHERE user_pk = %s', (user_pk,))
         db.commit()
 
         return template('profile_restored')
